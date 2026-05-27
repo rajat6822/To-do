@@ -49,4 +49,17 @@ app.post(
     }
 )
 
+// @route get /api/notes
+// @description Read all notes
+// @access Public
+app.get(
+    '/api/notes',
+    async (req, res) => {
+        const notes = NotesModel.find()
+
+        return res.status(200).json(notes)
+    }
+)
+
+
 module.exports = app
