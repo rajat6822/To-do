@@ -34,21 +34,22 @@ app.post(
 
             if (description.trim().length < 10)
                 return res.status(400).json({
-                    error: "Description must be at least 4 characters long"
+                    error: "Description must be at least 10 characters long"
                 })
 
             // If validations passes then create the note
-            const newNote = NotesModel.create({
+            const newNote = await NotesModel.create({
                 title,
                 description
             })
 
             return res.status(201).json({
-                message: "Note Created succesfully"
+                message: "Note Created succesfully",
+                note: newNote
             })
 
         } catch (error) {
-            return res.status(400).json({
+            return res.status(500).json({
                 message: "Error in creating notes",
                 error: error.message
             })
@@ -56,6 +57,26 @@ app.post(
     }
 )
 
+// @route GET /api/notes
+// @description Read all notes
+// @access Public
+app.get(
+    '/api/notes',
+    async (req, res) => {
+        try {
+
+            const notes = await NotesModel.find()
+
+            return res.status(201).json(notes)
+            
+        } catch (error) {
+            return res.status(500).json({
+                message: "Error in fetching all notes",
+                error: error.message
+            })
+        }
+    }
+)
 
 
 module.exports = app

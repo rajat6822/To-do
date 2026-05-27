@@ -1,5 +1,5 @@
-const connectDB = require("../SecondAttempt/src/config/db");
-const app = require("./config/app");
+const connectDB = require("./src/config/db");
+const app = require("./src/app");
 
 connectDB()
 
