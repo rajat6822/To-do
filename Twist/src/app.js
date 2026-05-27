@@ -68,7 +68,7 @@ app.get(
             const notes = await NotesModel.find()
 
             return res.status(201).json(notes)
-            
+
         } catch (error) {
             return res.status(500).json({
                 message: "Error in fetching all notes",
@@ -78,5 +78,50 @@ app.get(
     }
 )
 
+// @route Patch /api/notes/updat/:id
+// @description Update notes by id
+// @access Public
+app.patch(
+    '/api/notes/update/:id',
+    async (req, res) => {
+        try {
+
+            const { id } = req.params
+            const { description } = req.body
+
+
+            // -----Validations-----
+            if (!description)
+                return res.status(400).json({
+                    error: "Desciption is required"
+                })
+
+            if (description.trim().length < 10)
+                return res.status(400).json({
+                    error: "Description must be at least 10 characters long"
+                })
+
+            // If validation passes update notes
+
+            const note = await NotesModel.findByIdAndUpdate(id)
+
+            if (!note)
+                return res.status(404).json({
+                    error: "Note not found"
+                })
+
+            note.description = description
+            note.save()
+
+            return res.status(200).json(note)
+
+        } catch (error) {
+            return res.status(500).json({
+                message: "Error in updating",
+                error: error.message
+            })
+        }
+    }
+)
 
 module.exports = app

@@ -94,9 +94,7 @@ app.patch(
         note.description = description
         await note.save()
 
-        return res.status(200).json({
-            message: "Notes updated succesfully"
-        })
+        return res.status(200).json(note)
 
     }
 )
