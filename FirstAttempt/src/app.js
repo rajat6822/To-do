@@ -8,7 +8,6 @@ app.use(express.json())
 // @route POST /api/notes
 // @description Create a new note need title and description in the request body
 // @access Public
-
 app.post(
     '/api/notes',
     async (req, res) => {
@@ -48,6 +47,21 @@ app.post(
             note: newNote
         })
 
+    }
+)
+
+// @route GET /api/notes
+// @description Get all notes
+// @access Public
+app.get(
+    '/api/notes',
+    async (req, res) => {
+        const notes = await NoteModel.find()
+
+        return res.status(200).json({
+            massage: "Notes fetched succesfully",
+            notes
+        })
     }
 )
 
