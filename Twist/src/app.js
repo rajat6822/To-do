@@ -78,7 +78,7 @@ app.get(
     }
 )
 
-// @route Patch /api/notes/updat/:id
+// @route Patch /api/notes/update/:id
 // @description Update notes by id
 // @access Public
 app.patch(
@@ -118,6 +118,37 @@ app.patch(
         } catch (error) {
             return res.status(500).json({
                 message: "Error in updating",
+                error: error.message
+            })
+        }
+    }
+)
+
+// @route DELETE /api/notes/delete/:id
+// @description Update notes by id
+// @access Public
+app.delete(
+    '/api/notes/delete/:id',
+    async (req, res) => {
+        try {
+
+            const {id} = req.params
+
+            const deleteNote = await NotesModel.findByIdAndDelete(id) 
+
+            if(!deleteNote)
+                return res.status(404).json({
+                    error: "Note not found"
+            })
+
+            res.status(200).json({
+                message: "Note deleted succesfully",
+                note: deleteNote
+            })
+            
+        } catch (error) {
+            return res.status(500).json({
+                message: "Error in deleting note",
                 error: error.message
             })
         }
