@@ -65,4 +65,45 @@ app.get(
     }
 )
 
+// @route PATCH /api/notes/:id
+// @description Update a note by id
+// @access Public
+app.patch(
+    '/api/notes/:id',
+    async (req, res) => {
+        const { id } = req.params
+
+        const { description } = req.body
+
+
+        // ------Validaiton------
+        if (!description)
+            return res.status(400).json({
+                error: "Description is required"
+            })
+
+        if (description.trim().length < 10)
+            return res.status(400).json({
+                error: "Description must be at least 10 characters long"
+            })
+
+        // If validation passes find note and update
+        const note = await NoteModel.findByIdAndUpdate(id) 
+
+        if(!note) 
+            return res.status(400).json({
+                error: "Note not found"
+        })
+
+        note.description = description
+        await note.save()
+
+        return res.status(200).json({
+            message: "Note updated successfully",
+            note
+        })
+ 
+    }
+)
+
 module.exports = app
